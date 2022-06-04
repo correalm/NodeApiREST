@@ -35,34 +35,34 @@ routes(app);
 //   });
 // });
 
-app.get("/books/:id", (req, res) => {
-  // Os parâmetros vem como string!
-  const index = searchBook(Number(req.params.id));
-  res.json(livros[index]);
-});
+// app.get("/books/:id", (req, res) => {
+//   // Os parâmetros vem como string!
+//   const index = searchBook(Number(req.params.id));
+//   res.json(livros[index]);
+// });
 
-app.post("/books", (req, res) => {
-  livros.push(req.body);
-  // status 201 é inserção concluida
-  res.status(201).send("Livro cadastrado com sucesso");
-});
+// app.post("/books", (req, res) => {
+//   livros.push(req.body);
+//   // status 201 é inserção concluida
+//   res.status(201).send("Livro cadastrado com sucesso");
+// });
 
-app.put("/books/:id", (req, res) => {
-  // Os parâmetros vem como string!
-  const index = searchBook(Number(req.params.id));
-  livros[index].title = req.body.title;
-  res.json(livros);
-});
+// app.put("/books/:id", (req, res) => {
+//   // Os parâmetros vem como string!
+//   const index = searchBook(Number(req.params.id));
+//   livros[index].title = req.body.title;
+//   res.json(livros);
+// });
 
-app.delete("/books/:id", (req, res) => {
-  const { id } = req.params;
-  const index = searchBook(Number(id));
-  livros.splice(index, 1);
-  res.send(`Livro ${id} removido com sucesso`);
-});
+// app.delete("/books/:id", (req, res) => {
+//   const { id } = req.params;
+//   const index = searchBook(Number(id));
+//   livros.splice(index, 1);
+//   res.send(`Livro ${id} removido com sucesso`);
+// });
 
-function searchBook(id) {
-  return livros.findIndex((livro) => livro.id === id);
-}
+// function searchBook(id) {
+//   return livros.findIndex((livro) => livro.id === id);
+// }
 
 export default app;

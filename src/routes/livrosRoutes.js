@@ -8,6 +8,12 @@ const router = express.Router();
 
 // ABAIXO: "DEFINIÇÃO DA ROTA", O QUE VAI SER EXECUTADO AO ACESSAR ESSA ROTA
 
-router.get("/books", LivroController.getAllBooks);
+router
+  .get("/books", LivroController.getAllBooks)
+  .get("/books/:title", LivroController.getBookByTitle)
+  .get("/books/id/:id", LivroController.getBookById)
+  .post("/books", LivroController.insertOneBook)
+  .delete("/books/:id", LivroController.deleteBook)
+  .put("/books/:id", LivroController.updateBook);
 
 export default router;
