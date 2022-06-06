@@ -1,10 +1,14 @@
 import books from "../models/Livro.js";
+import publishingCompany from "../models/Editora.js";
 
 class LivroController {
   static getAllBooks = (req, res) => {
-    books.find((err, books) => {
-      res.status(200).json(books);
-    });
+    books
+      .find()
+      .populate("author")
+      .exec((err, books) => {
+        res.status(200).json(books);
+      });
   };
 
   static getBookByTitle = (req, res) => {
@@ -22,13 +26,18 @@ class LivroController {
 
   static getBookById = (req, res) => {
     const id = req.params.id;
-    books.findById(id, (err, book) => {
-      if (!err) {
-        res.status(200).send(book);
-      } else {
-        res.status(500).send({ message: err.message });
-      }
-    });
+    books
+      .findById(id)
+      // quero popular o campo author pegando apenas a propriedade name do obj author
+      .populate("author", "name")
+      .populate("publishingCompany")
+      .exec((err, book) => {
+        if (!err) {
+          res.status(200).send(book);
+        } else {
+          res.status(500).send({ message: err.message });
+        }
+      });
   };
 
   static insertOneBook = (req, res) => {
@@ -58,6 +67,45 @@ class LivroController {
         res.status(500).send({ message: err.message });
       }
     });
+  };
+
+  static getBooksByPublishingCompany = (req, res) => {
+    const name = req.query.pCompany;
+
+    // PERGUNTAR SOBRE ISSO!
+    // Primeiro encontro o ID da editora que coloquei na busca
+    publishingCompany.find({ name }, (err, company) => {
+      if (!err) {
+        if (company.length > 0) {
+          // atribuo o id a uma const
+          const id = company[0]._id;
+          // faço a busca nos livros, com o parâmetro de pesquisa da editora com id que eu recuperei
+          books.find({ publishingCompany: id }, {}, (err, pCompanyBooks) => {
+            // verifica se a editora tem livros registrados
+            if (!err && pCompanyBooks.length > 0) {
+              res.status(200).json(pCompanyBooks);
+            } else {
+              res.status(500).send("Editora sem livros registrados");
+            }
+          });
+        } else {
+          res.status(500).send("Livro não encontrado");
+        }
+      }
+    });
+
+    // Forma como foi feito no curso
+    // const pCompany = req.query.pCompany;
+
+    // books.find({ publishingCompany: pCompany }, {}, (err, pCompanyBooks) => {
+    //   if (!err) {
+    //     if (pCompanyBooks.length > 0) {
+    //       res.status(200).json(pCompanyBooks);
+    //     } else {
+    //       res.status(500).send("Editora sem livros registrados");
+    //     }
+    //   }
+    // });
   };
 }
 

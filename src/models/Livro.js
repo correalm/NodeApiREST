@@ -4,8 +4,17 @@ import mongoose from "mongoose";
 const booksSchema = new mongoose.Schema({
   id: { type: String },
   title: { type: String, required: true },
-  author: { type: String, required: true },
-  publishingCompany: { type: String, required: true },
+  // O tipo será o id de um determinado objeto, referenciado na entidade criada "authors"
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "authors",
+    required: true,
+  },
+  publishingCompany: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "publishingCompany",
+    required: true,
+  },
   pages: { type: Number },
 });
 

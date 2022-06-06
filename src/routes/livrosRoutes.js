@@ -10,6 +10,7 @@ const router = express.Router();
 
 router
   .get("/books", LivroController.getAllBooks)
+  .get("/books/search", LivroController.getBooksByPublishingCompany)
   .get("/books/:title", LivroController.getBookByTitle)
   .get("/books/id/:id", LivroController.getBookById)
   .post("/books", LivroController.insertOneBook)
